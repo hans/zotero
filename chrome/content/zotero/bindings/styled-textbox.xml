@@ -603,10 +603,7 @@
 			<method name="clearUndo">
 				<body>
 				<![CDATA[
-					if (this._editor) {
-						this._editor.undoManager.clear();
-						this._editor.undoManager.add();
-					}
+					this._editor.codemirror.getDoc().clearHistory();
 				]]>
 				</body>
 			</method>

@@ -513,6 +513,7 @@
 						output = this.htmlToRTF(output)
 					}
 
+					alert(output);
 					return output;
 				]]></getter>
 				<setter><![CDATA[
@@ -678,7 +679,7 @@
 						}*/
 
 						if (!SJOW.zoteroInit) {
-							SJOW.zoteroInit = function(editor) {
+							SJOW.zoteroInit = function(doc, editor) {
 								// Necessary in Fx32+
 								if (editor.wrappedJSObject) {
 									self._editor = editor.wrappedJSObject;
@@ -690,8 +691,7 @@
 									self.value = self._value;
 
 									// Prevent undoing to empty note after initialization
-									self._editor.undoManager.clear();
-									self._editor.undoManager.add();
+									self._editor.codemirror.getDoc().clearHistory();
 								}
 								if (self._focus) {
 									setTimeout(function () {
@@ -708,21 +708,20 @@
 									if (fontSize < 6) {
 										fontSize = 11;
 									}
-									var css = "body#zotero-tinymce-note, "
-										+ "body#zotero-tinymce-note p, "
-										+ "body#zotero-tinymce-note th, "
-										+ "body#zotero-tinymce-note td, "
-										+ "body#zotero-tinymce-note pre { "
+									var css = "body#zotero-simplemde-note, "
+										+ "body#zotero-simplemde-note p, "
+										+ "body#zotero-simplemde-note th, "
+										+ "body#zotero-simplemde-note td, "
+										+ "body#zotero-simplemde-note pre { "
 											+ "font-size: " + fontSize + "px; "
 										+ "} "
-										+ "body#zotero-tinymce-note, "
-										+ "body#zotero-tinymce-note p { "
+										+ "body#zotero-simplemde-note, "
+										+ "body#zotero-simplemde-note p { "
 											+ "font-family: "
 											+ Zotero.Prefs.get('note.fontFamily') + "; "
 										+ "}"
 										+ Zotero.Prefs.get('note.css');
 
-									var doc = editor.contentDocument;
 									var head = doc.getElementsByTagName("head")[0];
 									var style = doc.createElement("style");
 									style.innerHTML = css;
@@ -735,20 +734,20 @@
 										cb(this._editor);
 									}
 								}
-								var css = "body { font-size: " + fontSize + "px;"
+								var css = "body { "
 										+ " font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace !important;"
 									+ " }"
 									+ ".CodeMirror { border: none !important; }"
 									+ Zotero.Prefs.get('note.css');
 
-								var doc = SJOW.document;
 								var head = doc.getElementsByTagName("head")[0];
 								var style = doc.createElement("style");
 								style.innerHTML = css;
 								head.appendChild(style);
-							}
 
-						});
+							};
+
+						}
 
 						if(window.ZoteroTab) {
 							ZoteroTab.containerWindow.gBrowser.removeEventListener("DOMContentLoaded", listener, true);

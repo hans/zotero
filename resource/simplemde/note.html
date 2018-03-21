@@ -16,9 +16,7 @@
         toolbar: false,
     });
 
-    window.onReady = function(callback) {
-        callback(editor);
-    };
+    setTimeout(function() { zoteroInit(document, editor); }, 100);
 </script>
 
 </body>
